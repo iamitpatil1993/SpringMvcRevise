@@ -15,5 +15,7 @@ public class HomeControllerTest extends BaseTest {
     public void home() throws Exception {
         mockMvc.perform(get("/"))
                 .andExpect(view().name("home"));
+        
+        
     }
 }

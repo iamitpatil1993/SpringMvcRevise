@@ -14,6 +14,7 @@
 		<vesion.junit>4.10</vesion.junit>
 		<version.java.source>11</version.java.source>
 		<version.java.target>11</version.java.target>
+		<jackson.databind-version>2.2.3</jackson.databind-version>
 	</properties>
 
 
@@ -30,6 +31,13 @@
 	</dependencyManagement>
 
 	<dependencies>
+	<!-- For Json support in REST API -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.10.1</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
@@ -40,8 +48,8 @@
 			<artifactId>spring-webmvc</artifactId>
 		</dependency>
 
-		<!-- Always remember that, jstl library is not provided by servlet containers
-			like tomcat, so it's scope should not be provided and should be compile in
+		<!-- Always remember that, jstl library is not provided by servlet containers 
+			like tomcat, so it's scope should not be provided and should be compile in 
 			order to ship this jar in generated war -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -50,7 +58,8 @@
 
 		</dependency>
 
-		<!-- This is standard jstl function library, provides useful functions to use. -->
+		<!-- This is standard jstl function library, provides useful functions 
+			to use. -->
 		<dependency>
 			<groupId>taglibs</groupId>
 			<artifactId>standard</artifactId>
@@ -59,8 +68,8 @@
 		</dependency>
 
 		<!-- Servlet -->
-		<!-- In order to use Annotation based spring config for mvc using, ServletContainerInitializer
-			interface in servlet 3.1 specification, we need to insuer that this dependency
+		<!-- In order to use Annotation based spring config for mvc using, ServletContainerInitializer 
+			interface in servlet 3.1 specification, we need to insuer that this dependency 
 			has minimum version of 3.1.0 -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -79,6 +88,20 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 			<version>${version.spring}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest-all</artifactId>
+			<version>1.3</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- commons file-upload -->
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.4</version>
 		</dependency>
 	</dependencies>
 

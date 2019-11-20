@@ -93,3 +93,4 @@ atlassian-ide-plugin.xml
 
 .factorypath
 
+*.sh

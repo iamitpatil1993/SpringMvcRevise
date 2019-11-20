@@ -5,17 +5,17 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Recent spittles</title>
+<title>Spittle</title>
 </head>
 <body>
+	<div>
+				<c:out value="${spittle.id}" />
+			</div>
+			<div>
+				<c:out value="${spittle.message}" />
+			</div>
 
-				<div>
-					<a href="<c:url value="/spittles/${spittle.id}" />">Link</a>
-				</div>
 
-				<div>
-					<a href="<c:url value="/spittles/register" />">Register</a>
-				</div>
 
 </body>
 </html>
