@@ -22,6 +22,7 @@ public class LatencyCalculatorInterceptor implements HandlerInterceptor {
 			throws Exception {
 		System.out.println("Inside LatencyCalculatorInterceptor#preHandle");
 		request.setAttribute("startTime", System.currentTimeMillis());
+		
 		return true;
 	}
 

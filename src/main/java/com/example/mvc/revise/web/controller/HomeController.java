@@ -2,7 +2,6 @@ package com.example.mvc.revise.web.controller;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
-import javax.servlet.ServletRegistration;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.ServletConfigAware;
 import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.servlet.support.AbstractDispatcherServletInitializer;
 
 /**
  * One of the Job of {@link WebApplicationContext} is to scan
