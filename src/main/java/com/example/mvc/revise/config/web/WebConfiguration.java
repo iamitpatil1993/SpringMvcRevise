@@ -82,11 +82,18 @@ public class WebConfiguration implements WebMvcConfigurer {
 
 	/**
 	 * Order of declaration of interceptors also defines there order of invocation.
+	 * Actually their default oder is zero unless specified. Hence all interceptors
+	 * has same order of HIGHEST, hence spring will invoke them based on their order
+	 * of registration here. We can change their order using order() function. NOTE:
+	 * If we do not define order using order() it will have 0 order hence will get
+	 * called first.
 	 */
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(new AuthHandlerInterceptor()).addPathPatterns("/**");
-		registry.addInterceptor(new LatencyCalculatorInterceptor()).addPathPatterns("/**");
-		registry.addInterceptor(new RequestLoggingInterceptor()).addPathPatterns("/**");
+		// using Order() we can change order of their invocation, hence order of
+		// registration here will not matter any more
+		registry.addInterceptor(new AuthHandlerInterceptor()).addPathPatterns("/**").order(2);
+		registry.addInterceptor(new LatencyCalculatorInterceptor()).addPathPatterns("/**").order(1);
+		registry.addInterceptor(new RequestLoggingInterceptor()).addPathPatterns("/**"); // Default order 0
 	}
 }
