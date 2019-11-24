@@ -30,18 +30,6 @@ public class EmployeeController {
 
 	private static final String HOME_AMIPATIL_TEMO = "/home/amipatil/temp/";
 
-	/**
-	 * This Will not work now because, there is no Json/XML view resolver
-	 * configured, and hence ContentNegotiatingViewResolver will fall and return
-	 * null view. Hence InternalResourceViewResolver already configured in
-	 * application context will get used [as we know spring loops over all
-	 * ViewResolver in application and uses first matching one]. Which will try to
-	 * resolve view name from current url '/api/employees' [/api/employees.jsp], which is not available
-	 * in application hence this (actually all) API will currently return 404 : Not
-	 * Found
-	 * 
-	 * @return
-	 */
 	@GetMapping
 	public JsonResponse get() {
 		Employee employee = new Employee();

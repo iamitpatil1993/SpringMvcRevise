@@ -107,6 +107,10 @@ public class WebConfiguration implements WebMvcConfigurer {
 		// marshal/unmarshal model passed to it.
 		MappingJackson2JsonView jackson2JsonView = new MappingJackson2JsonView();
 		
+		// this enables sending model attribute as a response if model has single key. So, there won't be any key in respones
+		// just flat single model attribute
+		jackson2JsonView.setExtractValueFromSingleKeyModel(true);
+		
 		viewResolver.setDefaultViews(Arrays.asList(jackson2JsonView));
 		
 		return viewResolver;
