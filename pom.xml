@@ -15,6 +15,7 @@
 		<version.java.source>11</version.java.source>
 		<version.java.target>11</version.java.target>
 		<jackson.databind-version>2.2.3</jackson.databind-version>
+		<jaxb-api.version>2.3.1</jaxb-api.version>
 	</properties>
 
 
@@ -31,7 +32,32 @@
 	</dependencyManagement>
 
 	<dependencies>
-	<!-- For Json support in REST API -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-oxm</artifactId>
+			</dependency>
+
+		<!-- JAXB 2.3.0 for jdk9+ -->
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>${jaxb-api.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.jaxb</groupId>
+			<artifactId>jaxb-runtime</artifactId>
+			<version>${jaxb-api.version}</version>
+		</dependency>
+		<!-- JAXB needs javax.activation module (jdk9) -->
+		<dependency>
+			<groupId>javax.activation</groupId>
+			<artifactId>javax.activation-api</artifactId>
+			<version>1.2.0</version>
+		</dependency>
+
+
+
+		<!-- For Json support in REST API -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>

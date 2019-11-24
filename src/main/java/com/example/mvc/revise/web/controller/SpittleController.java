@@ -53,7 +53,7 @@ public class SpittleController implements InitializingBean {
 	@RequestMapping(path = { "/{spittleId}" }, method = RequestMethod.GET)
 	public String getSpittleById(@PathVariable(name = "spittleId") String spittleId, final Model model) {
 		if (spittleId.equals("asdf")) {
-			throw new SpittleNotFoundException("Spittle not found by id :: " + spittleId);
+			throw new ResourceNotFoundException("Spittle not found by id :: " + spittleId);
 		}
 		final Spittle spittle = spittleRepository.findById(spittleId);
 		model.addAttribute(spittle);
@@ -82,7 +82,7 @@ public class SpittleController implements InitializingBean {
 	@PostMapping(path = "/delete/{spittrId}")
 	public String delete(@PathVariable(name = "spittrId") final String spittrId, Model model) {
 		if (spittrId.equals("asdf")) {
-			throw new SpittleNotFoundException("Spittr not found by Id :: " + spittrId);
+			throw new ResourceNotFoundException("Spittr not found by Id :: " + spittrId);
 		}
 		model.addAttribute("message", "Spittr deleted successfully");
 		return "uploadResult";

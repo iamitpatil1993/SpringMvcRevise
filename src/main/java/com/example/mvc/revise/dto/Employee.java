@@ -3,16 +3,21 @@ package com.example.mvc.revise.dto;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+@XmlRootElement
 public class Employee implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -2821654871402178482L;
+	
+	private String id;
 
 	private String firstName;
 
@@ -45,6 +50,14 @@ public class Employee implements Serializable {
 
 	public void setDob(Date dob) {
 		this.dob = dob;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 }

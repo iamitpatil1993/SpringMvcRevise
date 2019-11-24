@@ -8,11 +8,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter;
+import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -67,19 +71,7 @@ public class WebConfiguration implements WebMvcConfigurer {
 
 		return commonsMultipartResolver;
 	}
-
-	@Bean
-	public MappingJackson2HttpMessageConverter jackson2HttpMessageConverter() {
-		return new MappingJackson2HttpMessageConverter();
-	}
-
-	@Bean
-	public RequestMappingHandlerAdapter mappingHandlerAdapter(final MappingJackson2HttpMessageConverter converter) {
-		RequestMappingHandlerAdapter requestMappingHandlerAdapter = new RequestMappingHandlerAdapter();
-		requestMappingHandlerAdapter.setMessageConverters(Arrays.asList(converter));
-		return requestMappingHandlerAdapter;
-	}
-
+	
 	/**
 	 * Order of declaration of interceptors also defines there order of invocation.
 	 * Actually their default oder is zero unless specified. Hence all interceptors
@@ -95,5 +87,11 @@ public class WebConfiguration implements WebMvcConfigurer {
 		registry.addInterceptor(new AuthHandlerInterceptor()).addPathPatterns("/**").order(2);
 		registry.addInterceptor(new LatencyCalculatorInterceptor()).addPathPatterns("/**").order(1);
 		registry.addInterceptor(new RequestLoggingInterceptor()).addPathPatterns("/**"); // Default order 0
+	}
+	
+	@Override
+	public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
+		configurer.defaultContentType(MediaType.APPLICATION_JSON);
+		configurer.favorPathExtension(false);
 	}
 }

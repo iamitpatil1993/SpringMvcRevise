@@ -1,7 +1,12 @@
 package com.example.mvc.revise.dto;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
+
 import org.springframework.http.HttpStatus;
 
+@XmlRootElement
+@XmlSeeAlso({Employee.class})
 public class JsonResponse {
 	
 	private HttpStatus httpStatus;

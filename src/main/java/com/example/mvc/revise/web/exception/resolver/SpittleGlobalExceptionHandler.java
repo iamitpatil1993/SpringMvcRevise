@@ -1,17 +1,7 @@
 package com.example.mvc.revise.web.exception.resolver;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpStatus;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-
-import com.example.mvc.revise.web.controller.SpittleAlreadyExitstException;
-import com.example.mvc.revise.web.controller.SpittleNotFoundException;
 
 /**
  * When we define multiple ControllerAdvice for exception handling, behavior is
@@ -30,11 +20,6 @@ import com.example.mvc.revise.web.controller.SpittleNotFoundException;
 @Order(value = 0)
 public class SpittleGlobalExceptionHandler extends BaseGlobalExceptionHandler {
 
-	@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Not found")
-	@ExceptionHandler(value = SpittleNotFoundException.class)
-	public void spittlrNotFoundExceptionHandler(SpittleNotFoundException exception, HttpServletRequest httpServletRequest) {
-		super.logRequest(httpServletRequest);
-		System.out.println("Inside GlobalExceptionHandler#spittlrNotFoundExceptionHandler");
-	}
+
 
 }

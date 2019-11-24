@@ -8,6 +8,7 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.util.StopWatch;
 
@@ -25,6 +26,8 @@ public class LatencyLoggerFilter implements Filter {
 
 		System.out.println("LatencyLoggerFilter.doFilter");
 		stopWatch.start();
+		
+		((HttpServletResponse) response).addHeader("customHeaderAnother", "fromInterceptor");
 		chain.doFilter(request, response);
 		stopWatch.stop();
 

@@ -4,9 +4,14 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.bind.annotation.XmlRootElement;
 
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -15,15 +20,19 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.mvc.revise.dto.Employee;
 import com.example.mvc.revise.dto.JsonResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 @RequestMapping(path = "/api/employees")
@@ -31,14 +40,26 @@ public class EmployeeController {
 
 	private static final String HOME_AMIPATIL_TEMO = "/home/amipatil/temp/";
 
-	@GetMapping
-	public ResponseEntity<JsonResponse> get() {
+	@GetMapping(path = { "/{employeeId}" }, produces = { "application/json", "application/xml" })
+	@ResponseStatus(value = HttpStatus.OK)
+	public JsonResponse get(final @PathVariable String employeeId) {
+		if (employeeId.toLowerCase().equals("notfound")) {
+			throw new ResourceNotFoundException("Employee Not found by ID :: " + employeeId);
+		}
 		Employee employee = new Employee();
 		employee.setFirstName("Amit");
 		employee.setLastName("Patil");
+		employee.setId(employeeId);
 
-		return ResponseEntity.status(HttpStatus.OK)
-				.body(new JsonResponse().setData(employee).setHttpStatus(HttpStatus.OK).setMessage("Success"));
+		return new JsonResponse().setData(employee).setHttpStatus(HttpStatus.OK).setMessage("Success");
+	}
+
+	@PostMapping
+	public ResponseEntity<JsonResponse> createEmployee(@RequestBody Employee employee) {
+
+		employee.setId(UUID.randomUUID().toString());
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body(new JsonResponse().setData(employee).setHttpStatus(HttpStatus.CREATED).setMessage("Created"));
 	}
 
 	@RequestMapping(path = "/{employeeId}/profilePicture", method = RequestMethod.POST)
@@ -52,8 +73,8 @@ public class EmployeeController {
 				e.printStackTrace();
 			}
 		}
-		final String path = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/")
-				.path(file.getOriginalFilename()).build().toUriString();
+		
+		final String path = ServletUriComponentsBuilder.fromCurrentRequest().path("/").path(file.getOriginalFilename()).build().toUriString();
 		return path;
 	}
 
@@ -88,8 +109,6 @@ public class EmployeeController {
 				.header(HttpHeaders.CONTENT_DISPOSITION,
 						"inline; filename=\"" + fileSystemResource.getFilename() + "\"")
 				.contentType(MediaType.parseMediaType(mimeType)).body(fileSystemResource); // This is how we should set
-																							// body [binary data] in
-																							// response.
-
+		// body [binary data] in
 	}
 }

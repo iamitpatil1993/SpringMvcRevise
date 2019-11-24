@@ -1,12 +1,22 @@
 package com.example.mvc.revise.web.exception.resolver;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.example.mvc.revise.dto.JsonResponse;
+import com.example.mvc.revise.web.controller.ResourceNotFoundException;
 import com.example.mvc.revise.web.controller.SpittleAlreadyExitstException;
 
 /**
@@ -63,5 +73,19 @@ public class AnotherGlobalExceptionHandler extends BaseGlobalExceptionHandler {
 		model.addAttribute("message", "Internal Server Error caused by, : " + exception.getMessage());
 		exception.printStackTrace();
 		return "/errors/notFound";
+	}
+
+	@ExceptionHandler(value = HttpMediaTypeNotAcceptableException.class)
+	public ResponseEntity httpMediaTypeNotAcceptableExceptionHandler(HttpMediaTypeNotAcceptableException exception) {
+		return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+
+	}
+
+	@ExceptionHandler(value = ResourceNotFoundException.class)
+	@ResponseStatus(value = HttpStatus.NOT_FOUND)
+	public @ResponseBody JsonResponse resourceNotFoundExceptionHandler(ResourceNotFoundException employeeNotFoundException) {
+		return new JsonResponse()
+				.setHttpStatus(HttpStatus.NOT_FOUND)
+				.setMessage(employeeNotFoundException.getMessage());
 	}
 }
