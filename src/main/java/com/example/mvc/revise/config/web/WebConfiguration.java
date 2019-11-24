@@ -1,6 +1,7 @@
 package com.example.mvc.revise.config.web;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -18,6 +19,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
+import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import com.example.mvc.revise.web.interceptor.AuthHandlerInterceptor;
 import com.example.mvc.revise.web.interceptor.LatencyCalculatorInterceptor;
@@ -95,6 +97,18 @@ public class WebConfiguration implements WebMvcConfigurer {
 	@Bean
 	public ContentNegotiatingViewResolver contentNegotiatingViewResolver() {
 		ContentNegotiatingViewResolver viewResolver = new ContentNegotiatingViewResolver();
+		
+		// Since there is no ViewResolver implementation in spring for Json/Jackson.
+		// Lets add defaultView class which ContentNegotiatingViewResolver will fallback
+		// to
+		// when no matching ViewResolver implementation found for JSON. Even though
+		// there is no ViewResolver implementation for Jackson in spring, we have view
+		// implementation for Jackson which uses Jackson [ObjectMapper] to
+		// marshal/unmarshal model passed to it.
+		MappingJackson2JsonView jackson2JsonView = new MappingJackson2JsonView();
+		
+		viewResolver.setDefaultViews(Arrays.asList(jackson2JsonView));
+		
 		return viewResolver;
 	}
 }
