@@ -3,9 +3,6 @@ package com.example.mvc.revise.dto;
 import java.io.Serializable;
 import java.util.Date;
 
-import org.springframework.web.multipart.MultipartFile;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class Employee implements Serializable {
 
@@ -20,7 +17,6 @@ public class Employee implements Serializable {
 
 	// we can use all Jackson/Jaxb annotations to define format of Date fields
 	// in serialized Json/XML and vice versa
-	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date dob = new Date();
 
 	public String getFirstName() {

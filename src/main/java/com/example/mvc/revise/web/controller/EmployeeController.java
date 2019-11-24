@@ -3,7 +3,6 @@ package com.example.mvc.revise.web.controller;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -13,32 +12,43 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.mvc.revise.dto.Employee;
 import com.example.mvc.revise.dto.JsonResponse;
 
-@RestController
+@Controller
 @RequestMapping(path = "/api/employees")
 public class EmployeeController {
 
 	private static final String HOME_AMIPATIL_TEMO = "/home/amipatil/temp/";
 
+	/**
+	 * This Will not work now because, there is no Json/XML view resolver
+	 * configured, and hence ContentNegotiatingViewResolver will fall and return
+	 * null view. Hence InternalResourceViewResolver already configured in
+	 * application context will get used [as we know spring loops over all
+	 * ViewResolver in application and uses first matching one]. Which will try to
+	 * resolve view name from current url '/api/employees' [/api/employees.jsp], which is not available
+	 * in application hence this (actually all) API will currently return 404 : Not
+	 * Found
+	 * 
+	 * @return
+	 */
 	@GetMapping
-	public ResponseEntity<JsonResponse> get() {
+	public JsonResponse get() {
 		Employee employee = new Employee();
 		employee.setFirstName("Amit");
 		employee.setLastName("Patil");
 
-		return ResponseEntity.status(HttpStatus.OK)
-				.body(new JsonResponse().setData(employee).setHttpStatus(HttpStatus.OK).setMessage("Success"));
+		return new JsonResponse().setData(employee).setHttpStatus(HttpStatus.OK).setMessage("Success");
 	}
 
 	@RequestMapping(path = "/{employeeId}/profilePicture", method = RequestMethod.POST)
