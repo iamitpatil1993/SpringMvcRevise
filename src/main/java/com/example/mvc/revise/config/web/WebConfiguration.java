@@ -1,7 +1,6 @@
 package com.example.mvc.revise.config.web;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -26,7 +25,7 @@ import com.example.mvc.revise.web.interceptor.LatencyCalculatorInterceptor;
 import com.example.mvc.revise.web.interceptor.RequestLoggingInterceptor;
 
 @EnableWebMvc
-@ComponentScan(basePackages = { "com.example.mvc.revise.web" })
+@ComponentScan(basePackages = { "com.example.mvc.revise.web", "com.example.mvc.revise.config.web.viewresolver" })
 @Configuration
 public class WebConfiguration implements WebMvcConfigurer {
 
@@ -98,6 +97,19 @@ public class WebConfiguration implements WebMvcConfigurer {
 	public ContentNegotiatingViewResolver contentNegotiatingViewResolver() {
 		ContentNegotiatingViewResolver viewResolver = new ContentNegotiatingViewResolver();
 		
+		// We should set this parameter because, if ContentNegotiatingViewResolver finds
+		// no ViewResolver for mime type in Accept header
+		// it will return null, but as we know DispatcherServlet iterates over
+		// ViewResolvers found in web application context, then it will
+		// use next view resolver in chain, if that view resolver returns view (for
+		// example next ViewResolver in chain is JsonViewResolver) then
+		// client will always get json response if client is requesting application/xml
+		// in Accept header. so setting this property,
+		// ContentNegotiatingViewResolver will return
+		// ContentNegotiatingViewResolver#NOT_ACCEPTABLE_VIEW which will return 406 to
+		// response
+		viewResolver.setUseNotAcceptableStatusCode(true);
+		
 		// Since there is no ViewResolver implementation in spring for Json/Jackson.
 		// Lets add defaultView class which ContentNegotiatingViewResolver will fallback
 		// to
@@ -111,7 +123,9 @@ public class WebConfiguration implements WebMvcConfigurer {
 		// just flat single model attribute
 		jackson2JsonView.setExtractValueFromSingleKeyModel(true);
 		
-		viewResolver.setDefaultViews(Arrays.asList(jackson2JsonView));
+		// we do not need to set Json view here now, since we have declared custom
+		// ViewResolver for Json in web application context.
+		//viewResolver.setDefaultViews(Arrays.asList(jackson2JsonView));
 		
 		return viewResolver;
 	}
