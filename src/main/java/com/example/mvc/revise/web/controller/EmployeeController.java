@@ -3,6 +3,9 @@ package com.example.mvc.revise.web.controller;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -41,6 +45,18 @@ public class EmployeeController {
 				.body(new JsonResponse().setData(employee).setHttpStatus(HttpStatus.OK).setMessage("Success"));
 	}
 
+	@GetMapping
+	public ResponseEntity<JsonResponse> getAll() {
+		Employee employee = new Employee();
+		employee.setFirstName("Amit");
+		employee.setLastName("Patil");
+		employee.setId(UUID.randomUUID().toString());
+		
+		List<Employee> employees = Arrays.asList(employee);
+		
+		return ResponseEntity.ok(new JsonResponse().setData(employees).setHttpStatus(HttpStatus.OK));
+	}
+	
 	@RequestMapping(path = "/{employeeId}/profilePicture", method = RequestMethod.POST)
 	public String uploadProfilePicture(final @PathVariable(name = "employeeId") String employeeId,
 			@RequestParam(name = "file") MultipartFile file) {

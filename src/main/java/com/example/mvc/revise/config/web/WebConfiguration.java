@@ -1,6 +1,5 @@
 package com.example.mvc.revise.config.web;
 
-import java.awt.MediaTracker;
 import java.io.IOException;
 import java.util.Arrays;
 
