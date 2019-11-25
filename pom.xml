@@ -31,7 +31,9 @@
 	</dependencyManagement>
 
 	<dependencies>
-	<!-- For Json support in REST API -->
+		<!-- For Json support in REST API -->
+		<!-- MappingJackson2HttpMessageConverter already registered as a MesssageConverter. 
+			Only thing that requires is this maven dependency in classpath -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
