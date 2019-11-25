@@ -111,5 +111,7 @@ public class WebConfiguration implements WebMvcConfigurer {
 		configurer.defaultContentType(MediaType.APPLICATION_JSON);
 		
 		configurer.ignoreUnknownPathExtensions(false);
+		
+		configurer.favorPathExtension(false);
 	}
 }

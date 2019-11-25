@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -46,7 +47,11 @@ public class EmployeeController {
 	}
 
 	@GetMapping
-	public ResponseEntity<JsonResponse> getAll() {
+	// we can use this to send status code to response in case of success case.
+	// Status code set at ResponseEntity inside method
+	// will override this valie
+	@ResponseStatus(value = HttpStatus.OK) 
+	public JsonResponse getAll() {
 		Employee employee = new Employee();
 		employee.setFirstName("Amit");
 		employee.setLastName("Patil");
@@ -54,7 +59,7 @@ public class EmployeeController {
 		
 		List<Employee> employees = Arrays.asList(employee);
 		
-		return ResponseEntity.ok(new JsonResponse().setData(employees).setHttpStatus(HttpStatus.OK));
+		return new JsonResponse().setData(employees).setHttpStatus(HttpStatus.OK);
 	}
 	
 	@RequestMapping(path = "/{employeeId}/profilePicture", method = RequestMethod.POST)
