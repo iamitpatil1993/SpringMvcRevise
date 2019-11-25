@@ -37,6 +37,9 @@ public class EmployeeController {
 
 	@GetMapping(path = {"/{employeeId}"})
 	public ResponseEntity<JsonResponse> get(final @PathVariable String employeeId) {
+		if (employeeId.toLowerCase().equals("notfound")) {
+			throw new ResouseNotFoundException("employee not found by ID :: " + employeeId);
+		}
 		Employee employee = new Employee();
 		employee.setFirstName("Amit");
 		employee.setLastName("Patil");
