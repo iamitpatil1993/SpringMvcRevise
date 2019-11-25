@@ -1,5 +1,6 @@
 package com.example.mvc.revise.config.web;
 
+import java.awt.MediaTracker;
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -7,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
@@ -105,5 +107,10 @@ public class WebConfiguration implements WebMvcConfigurer {
 		// this enables sending mime type required in query parameter 'format', NOTE: we need to send file extension as a value to 
 		// query parameter for example, json, xml are acceptable values.
 		configurer.favorParameter(true);
+		
+		// Set JSON as a default HttpMessageConverter to be used
+		configurer.defaultContentType(MediaType.APPLICATION_JSON);
+		
+		configurer.ignoreUnknownPathExtensions(false);
 	}
 }
