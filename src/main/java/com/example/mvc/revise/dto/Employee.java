@@ -17,6 +17,8 @@ public class Employee implements Serializable {
 	 */
 	private static final long serialVersionUID = -2821654871402178482L;
 
+	private String id;
+	
 	private String firstName;
 
 	private String lastName;
@@ -50,4 +52,13 @@ public class Employee implements Serializable {
 		this.dob = dob;
 	}
 
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	
 }

@@ -2,17 +2,16 @@ package com.example.mvc.revise.config.web;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -95,5 +94,16 @@ public class WebConfiguration implements WebMvcConfigurer {
 		registry.addInterceptor(new AuthHandlerInterceptor()).addPathPatterns("/**").order(2);
 		registry.addInterceptor(new LatencyCalculatorInterceptor()).addPathPatterns("/**").order(1);
 		registry.addInterceptor(new RequestLoggingInterceptor()).addPathPatterns("/**"); // Default order 0
+	}
+	
+	/**
+	 * This allows us to configure content-negotiation not only in case of ContentNegotiatingViewResolver way but also
+	 * HttpMessageConverter way also.
+	 */
+	@Override
+	public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
+		// this enables sending mime type required in query parameter 'format', NOTE: we need to send file extension as a value to 
+		// query parameter for example, json, xml are acceptable values.
+		configurer.favorParameter(true);
 	}
 }

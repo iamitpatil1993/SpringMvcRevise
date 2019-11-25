@@ -30,12 +30,13 @@ public class EmployeeController {
 
 	private static final String HOME_AMIPATIL_TEMO = "/home/amipatil/temp/";
 
-	@GetMapping
-	public ResponseEntity<JsonResponse> get() {
+	@GetMapping(path = {"/{employeeId}"})
+	public ResponseEntity<JsonResponse> get(final @PathVariable String employeeId) {
 		Employee employee = new Employee();
 		employee.setFirstName("Amit");
 		employee.setLastName("Patil");
-
+		employee.setId(employeeId);
+		
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(new JsonResponse().setData(employee).setHttpStatus(HttpStatus.OK).setMessage("Success"));
 	}
