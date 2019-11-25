@@ -3,10 +3,13 @@ package com.example.mvc.revise.dto;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+@XmlRootElement // Need this to set this class as a root of XML
 public class Employee implements Serializable {
 
 	/**
