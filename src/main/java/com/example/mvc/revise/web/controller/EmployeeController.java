@@ -17,6 +17,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -121,5 +123,14 @@ public class EmployeeController {
 																							// body [binary data] in
 																							// response.
 
+	}
+	
+	@PostMapping(consumes =  {"application/xml"})
+	public JsonResponse create(@RequestBody Employee employee) {
+		if (employee != null) {
+			System.out.println("Body got parsed correctly, employee :: " + employee);
+			employee.setId(UUID.randomUUID().toString());
+		}
+		return new JsonResponse().setHttpStatus(HttpStatus.CREATED).setMessage("Created").setData(employee);
 	}
 }

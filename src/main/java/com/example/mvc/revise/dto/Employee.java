@@ -5,8 +5,6 @@ import java.util.Date;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @XmlRootElement // Need this to set this class as a root of XML
@@ -60,5 +58,11 @@ public class Employee implements Serializable {
 		this.id = id;
 	}
 
+	@Override
+	public String toString() {
+		return "Employee [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", dob=" + dob + "]";
+	}
+
+	
 	
 }
