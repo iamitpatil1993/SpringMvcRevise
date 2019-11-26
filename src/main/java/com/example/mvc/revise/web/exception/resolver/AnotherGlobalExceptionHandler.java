@@ -6,6 +6,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -78,5 +79,12 @@ public class AnotherGlobalExceptionHandler extends BaseGlobalExceptionHandler {
 	@ResponseStatus(value = HttpStatus.NOT_FOUND)
 	public @ResponseBody JsonResponse resoureNotFoundExceptionHandler(ResouseNotFoundException exception) {
 		return new JsonResponse().setHttpStatus(HttpStatus.NOT_FOUND).setMessage(exception.getMessage());
+	}
+	
+	@ExceptionHandler(value = HttpMediaTypeNotAcceptableException.class)
+	@ResponseBody
+	@ResponseStatus(value = HttpStatus.NOT_ACCEPTABLE)
+	public JsonResponse httpMediaTypeNotAcceptableExceptionHandler(HttpMediaTypeNotAcceptableException exception) {
+		return new JsonResponse().setHttpStatus(HttpStatus.NOT_ACCEPTABLE).setMessage(exception.getMessage());
 	}
 }

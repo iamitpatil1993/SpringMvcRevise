@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,11 +29,18 @@ import com.example.mvc.revise.dto.Employee;
 import com.example.mvc.revise.dto.JsonResponse;
 
 @RestController
-@RequestMapping(path = "/api/employees")
+@RequestMapping(path = "/api/employees", produces = {"application/json", "application/xml"}) // applicable for all methods
 public class EmployeeController {
 
 	private static final String HOME_AMIPATIL_TEMO = "/home/amipatil/temp/";
 
+	/**
+	 * produces, restricts type of response types this method can produce. If client requests mime type other than
+	 * mentioned in this list, spring will throw 406 http error code, even though HttpMessageConverter compatible 
+	 * for that type is registered in application context and appropriate library is also available in class-path
+	 * @param employeeId
+	 * @return
+	 */
 	@GetMapping(path = {"/{employeeId}"})
 	public ResponseEntity<JsonResponse> get(final @PathVariable String employeeId) {
 		if (employeeId.toLowerCase().equals("notfound")) {
