@@ -6,10 +6,12 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.example.mvc.revise.dto.JsonResponse;
 import com.example.mvc.revise.web.controller.ResouseNotFoundException;
@@ -26,7 +28,7 @@ import com.example.mvc.revise.web.controller.SpittleAlreadyExitstException;
  * @author amipatil
  *
  */
-@ControllerAdvice
+@ControllerAdvice 
 /**
  * if we have multiple Exception handlers in application then spring will
  * randomly chose first matching exception handler method for exception. Hence
@@ -42,7 +44,7 @@ import com.example.mvc.revise.web.controller.SpittleAlreadyExitstException;
  * @author amipatil
  *
  */
-@Order(value = 1)
+@Order(value = 2)
 public class AnotherGlobalExceptionHandler extends BaseGlobalExceptionHandler {
 
 	/**
@@ -71,19 +73,17 @@ public class AnotherGlobalExceptionHandler extends BaseGlobalExceptionHandler {
 		return "/errors/notFound";
 	}
 	
-	/**
-	 * Exception handler can be implemented in exactly similar way as a controller method.
-	 */
-	@ExceptionHandler(value = ResouseNotFoundException.class)
-	@ResponseStatus(value = HttpStatus.NOT_FOUND)
-	public @ResponseBody JsonResponse resoureNotFoundExceptionHandler(ResouseNotFoundException exception) {
-		return new JsonResponse().setHttpStatus(HttpStatus.NOT_FOUND).setMessage(exception.getMessage());
-	}
-	
 	@ExceptionHandler(value = HttpMediaTypeNotAcceptableException.class)
 	@ResponseBody
 	@ResponseStatus(value = HttpStatus.NOT_ACCEPTABLE)
 	public JsonResponse httpMediaTypeNotAcceptableExceptionHandler(HttpMediaTypeNotAcceptableException exception) {
 		return new JsonResponse().setHttpStatus(HttpStatus.NOT_ACCEPTABLE).setMessage(exception.getMessage());
+	}
+	
+	@ResponseBody
+	@ExceptionHandler(MissingServletRequestParameterException.class)
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+	public JsonResponse missingServletRequestParameterExceptionHandler(MissingServletRequestParameterException exception) {
+		return new JsonResponse().setHttpStatus(HttpStatus.BAD_REQUEST).setMessage(exception.getMessage());
 	}
 }
