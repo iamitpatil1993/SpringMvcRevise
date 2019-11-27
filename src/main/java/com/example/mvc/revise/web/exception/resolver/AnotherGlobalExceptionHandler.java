@@ -3,18 +3,10 @@ package com.example.mvc.revise.web.exception.resolver;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
-import org.springframework.web.HttpMediaTypeNotAcceptableException;
-import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.example.mvc.revise.dto.JsonResponse;
-import com.example.mvc.revise.web.controller.ResouseNotFoundException;
 import com.example.mvc.revise.web.controller.SpittleAlreadyExitstException;
 
 /**
@@ -72,18 +64,5 @@ public class AnotherGlobalExceptionHandler extends BaseGlobalExceptionHandler {
 		exception.printStackTrace();
 		return "/errors/notFound";
 	}
-	
-	@ExceptionHandler(value = HttpMediaTypeNotAcceptableException.class)
-	@ResponseBody
-	@ResponseStatus(value = HttpStatus.NOT_ACCEPTABLE)
-	public JsonResponse httpMediaTypeNotAcceptableExceptionHandler(HttpMediaTypeNotAcceptableException exception) {
-		return new JsonResponse().setHttpStatus(HttpStatus.NOT_ACCEPTABLE).setMessage(exception.getMessage());
-	}
-	
-	@ResponseBody
-	@ExceptionHandler(MissingServletRequestParameterException.class)
-	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
-	public JsonResponse missingServletRequestParameterExceptionHandler(MissingServletRequestParameterException exception) {
-		return new JsonResponse().setHttpStatus(HttpStatus.BAD_REQUEST).setMessage(exception.getMessage());
-	}
+
 }
