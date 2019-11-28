@@ -130,4 +130,12 @@ public class WebConfiguration implements WebMvcConfigurer {
 		// replaced by what we add.
 		// Nothing to add other than one already registered
 	}
+	
+	/**
+	 * Used to add HttpMessageConverters to existing list without replacing list.
+	 */
+	@Override
+	public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
+		// Add new converters here on top of existing one without replacing existing HttpMessageConverter
+	}
 }
