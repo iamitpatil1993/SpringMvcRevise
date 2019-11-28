@@ -2,12 +2,15 @@ package com.example.mvc.revise.config.web;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
@@ -113,5 +116,18 @@ public class WebConfiguration implements WebMvcConfigurer {
 		configurer.ignoreUnknownPathExtensions(false);
 		
 		configurer.favorPathExtension(false);
+	}
+	
+	/**
+	 * This method replaces already/default registered message converters with list
+	 * provided by us. So, beware and you should consider consequences of this.
+	 */
+	@Override
+	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+		// Since we have not added anything to list, all existing/default converter will
+		// remain as it is.
+		// if we add anything to converters list, existing list will get compltetely
+		// replaced by what we add.
+		// Nothing to add other than one already registered
 	}
 }
