@@ -5,8 +5,6 @@ import java.util.Date;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 @XmlRootElement // Need this to set this class as a root of XML
 public class Employee implements Serializable {
 
@@ -21,9 +19,6 @@ public class Employee implements Serializable {
 
 	private String lastName;
 
-	// we can use all Jackson/Jaxb annotations to define format of Date fields
-	// in serialized Json/XML and vice versa
-	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date dob = new Date();
 
 	public String getFirstName() {

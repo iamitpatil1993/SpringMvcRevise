@@ -1,6 +1,7 @@
 package com.example.mvc.revise.config.web;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 
@@ -10,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
@@ -136,6 +137,22 @@ public class WebConfiguration implements WebMvcConfigurer {
 	 */
 	@Override
 	public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
-		// Add new converters here on top of existing one without replacing existing HttpMessageConverter
+		// Add new converters here on top of existing one without replacing existing
+		// HttpMessageConverter
+
+		// Updating MappingJackson2HttpMessageConverter to use custom ObjectMapper with
+		// Dateformat, which will be application to entire
+		// application while serialization and deserialization. No need to use
+		// @JsonFormat in pojo to define date format, unless want to override.
+		// This way we can customize any existing HttpMessageConverter
+		converters.stream().filter(converter -> converter instanceof MappingJackson2HttpMessageConverter)
+		.forEach(converter -> {
+			MappingJackson2HttpMessageConverter jackson2HttpMessageConverter = (MappingJackson2HttpMessageConverter) converter;
+			Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
+			builder.indentOutput(true).dateFormat(new SimpleDateFormat("yyyy-MM-dd"));
+
+			jackson2HttpMessageConverter.setObjectMapper(builder.build());
+		});
 	}
+	
 }
