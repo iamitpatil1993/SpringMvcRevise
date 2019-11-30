@@ -25,7 +25,7 @@ public class HeaderTestController {
 	 * @param userAgent User-Agent header
 	 */
 	@GetMapping(path = "/headers/specific/test")
-	public String specificHeader(@RequestHeader(name = "User-Agent", required = false) String userAgent,
+	private String specificHeader(@RequestHeader(name = "User-Agent", required = false) String userAgent,
 			@RequestHeader(name = "Content-Length", required = false) Long contentLength) {
 		System.out.println("User-Agent header is :: " + userAgent);
 		System.out.println("Content-Length header is :: " + contentLength);
@@ -42,7 +42,7 @@ public class HeaderTestController {
 	 */
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	@GetMapping(path = "/headers/all/map")
-	public void allHeadersUsingMap(@RequestHeader Map<String, String> headers) {
+	private void allHeadersUsingMap(@RequestHeader Map<String, String> headers) {
 		headers.forEach((key, value) -> {
 			System.out.println(String.format("Header Key :: %s, value :: %s", key, value));
 		});
@@ -56,7 +56,7 @@ public class HeaderTestController {
 	 */
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	@GetMapping(path = "/headers/all/multi-value-map")
-	public void allHeadersUsingMultiValueMap(@RequestHeader MultiValueMap<String, String> headers) {
+	private void allHeadersUsingMultiValueMap(@RequestHeader MultiValueMap<String, String> headers) {
 		headers.forEach((key, value) -> {
 			System.out.println(String.format("Header Key :: %s, values :: %s", key,
 					value.stream().collect(Collectors.joining("|"))));
@@ -65,7 +65,7 @@ public class HeaderTestController {
 
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	@GetMapping(path = "/headers/all/http-headers")
-	public void allHeadersUsingHttpHeader(@RequestHeader HttpHeaders headers) {
+	private void allHeadersUsingHttpHeader(@RequestHeader HttpHeaders headers) {
 		System.out.println("headers.getHost() :: " + headers.getHost()); // we can access standard headers via methods
 		System.out.println("User-Agent :: " + headers.get("User-Agent")); // we can access custom/non-standard headers
 		// like this.
