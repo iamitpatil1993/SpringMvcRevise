@@ -125,7 +125,7 @@ public class EmployeeController {
 
 	}
 	
-	@PostMapping(consumes =  {"application/xml"})
+	@PostMapping(consumes =  {"application/xml", "application/json"})
 	public JsonResponse create(@RequestBody Employee employee) {
 		if (employee != null) {
 			System.out.println("Body got parsed correctly, employee :: " + employee);
