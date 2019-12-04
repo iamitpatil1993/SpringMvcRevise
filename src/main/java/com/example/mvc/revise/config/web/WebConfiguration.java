@@ -2,9 +2,12 @@ package com.example.mvc.revise.config.web;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
@@ -26,6 +30,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
+import com.example.mvc.revise.config.support.RequestBodyToEntityProcessor;
 import com.example.mvc.revise.web.interceptor.AuthHandlerInterceptor;
 import com.example.mvc.revise.web.interceptor.LatencyCalculatorInterceptor;
 import com.example.mvc.revise.web.interceptor.RequestLoggingInterceptor;
@@ -35,6 +40,11 @@ import com.example.mvc.revise.web.interceptor.RequestLoggingInterceptor;
 @Configuration
 public class WebConfiguration implements WebMvcConfigurer {
 
+	private List<HttpMessageConverter<?>> messageConvertersForBodyProcessor = new ArrayList<>(2);
+	
+	@Autowired
+	private ModelMapper modelMapper;
+	
 	@Bean
 	public ViewResolver jspViewResolver() {
 		InternalResourceViewResolver internalResourceViewResolver = new InternalResourceViewResolver();
@@ -153,6 +163,19 @@ public class WebConfiguration implements WebMvcConfigurer {
 
 			jackson2HttpMessageConverter.setObjectMapper(builder.build());
 		});
+		
+		// collect message converters for custom HandlerMethodArgumentResolver (RequestBodyToEntityProcessor) 
+		converters.stream().forEach(messageConvertersForBodyProcessor::add);
 	}
 	
+	/**
+	 * Add custom {@link HandlerMethodArgumentResolver}, so that spring use this as
+	 * a one of strategy implementation for {@link HandlerMethodArgumentResolver}.
+	 */
+	@Override
+	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+		final RequestBodyToEntityProcessor bodyToEntityProcessor = new RequestBodyToEntityProcessor(
+				messageConvertersForBodyProcessor, modelMapper);
+		resolvers.add(bodyToEntityProcessor);
+	}
 }
