@@ -15,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,6 +33,9 @@ import com.example.mvc.revise.dto.JsonResponse;
 
 @RestController
 @RequestMapping(path = "/api/employees", produces = {"application/json", "application/xml"}) // applicable for all methods
+//we can have this at controller level which will enable CROS for all handle methods, annotation at method level will add up to existing configuration here.
+// single value attributes like maxAge will get overriden by method level annotation and collection attribute will be union or sum of controller level and method level.
+//@CrossOrigin 
 public class EmployeeController {
 
 	private static final String HOME_AMIPATIL_TEMO = "/home/amipatil/temp/";
@@ -43,6 +47,10 @@ public class EmployeeController {
 	 * @param employeeId
 	 * @return
 	 */
+	// This is how we can enable CROS at handler method level (fine-grained) This enables specified origins and headers.
+	// if we do not specify origin and headers, and only specify @CrossOrigin annotation, then spring will allow all origins and all headers
+	// Methods allowed defaults to @RequestMapping annotation method, so here method allowed is GET only
+	@CrossOrigin(origins = "http://localhost:8088", allowedHeaders = {"custom-header-1"})
 	@GetMapping(path = {"/{employeeId}"})
 	public ResponseEntity<JsonResponse> get(final @PathVariable String employeeId) {
 		if (employeeId.toLowerCase().equals("notfound")) {
@@ -58,6 +66,7 @@ public class EmployeeController {
 	}
 
 	@GetMapping
+	@CrossOrigin(allowedHeaders = {"customHeader"}, origins = {"http://localhost:8080"})
 	// we can use this to send status code to response in case of success case.
 	// Status code set at ResponseEntity inside method
 	// will override this valie
