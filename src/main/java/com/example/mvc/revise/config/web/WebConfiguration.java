@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -177,5 +178,15 @@ public class WebConfiguration implements WebMvcConfigurer {
 		final RequestBodyToEntityProcessor bodyToEntityProcessor = new RequestBodyToEntityProcessor(
 				messageConvertersForBodyProcessor, modelMapper);
 		resolvers.add(bodyToEntityProcessor);
+	}
+	
+	/**
+	 * This is how we can configure global CORS policy which will be applicable to entire application.
+	 * Any fine grained configuration at controller method level will add  up to this global configuration, except single 
+	 * value configuration values like maxAge
+	 */
+	@Override
+	public void addCorsMappings(CorsRegistry registry) {
+		registry.addMapping("/**").allowedOrigins("http://localhost:8088").allowedHeaders("customHeader");
 	}
 }
