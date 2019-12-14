@@ -1,10 +1,8 @@
 package com.example.mvc.revise.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.LinkRelation;
-import org.springframework.hateoas.server.EntityLinks;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -65,7 +63,7 @@ public class CustomerRestController {
 
 	@GetMapping(path = "/customers/{customerId:^[1-9]\\d*$}")
 	@ResponseStatus(HttpStatus.OK)
-	public EntityModel<CustomerGetDto> findById(final @PathVariable Long customerId) {
+	public CustomerGetDto findById(final @PathVariable Long customerId) {
 		final Customer customer = customerService.findById(customerId).get();
 		final CustomerGetDto customerGetDto = Util.convertUsingModelMapper(customer, CustomerGetDto.class);
 
@@ -96,9 +94,10 @@ public class CustomerRestController {
 		Link customersLink = new Link(ServletUriComponentsBuilder.fromCurrentContextPath().path("/customers").build().toString(), LinkRelation.of("customers"));
 		
 		// Build entity model from data and links
-		EntityModel<CustomerGetDto> entityModel2 = new EntityModel<CustomerGetDto>(customerGetDto, expandedTemplatedSelfLink, customersLink);
+		//EntityModel<CustomerGetDto> entityModel2 = new EntityModel<CustomerGetDto>(customerGetDto, expandedTemplatedSelfLink, customersLink);
 		
-		return entityModel2;
+		customerGetDto.add(expandedTemplatedSelfLink, customersLink);
+		return customerGetDto;
 	}
 
 }

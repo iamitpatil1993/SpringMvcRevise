@@ -3,6 +3,8 @@ package com.example.mvc.revise.dto;
 import java.io.Serializable;
 import java.util.Calendar;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,7 +28,11 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CustomerGetDto implements Serializable {
+// We can extend our Entities/DTOs with this class, which adds links to our model and useful APIs to add links
+// But, I don't like to extent framework classes, because this locks down this class and I can't extent other classes if need comes.
+// So, to support HATEOAs, I think using EntityModel and wrapping links and our Entities/DTOs in it seems to be better way. Which will save
+// us from extending any classes like this RepresentationModel
+public class CustomerGetDto extends RepresentationModel<CustomerGetDto> implements Serializable {
 
 	private static final long serialVersionUID = 3076703131063099303L;
 
