@@ -3,6 +3,7 @@ package com.example.mvc.revise.web.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.LinkRelation;
 import org.springframework.hateoas.server.EntityLinks;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
@@ -90,9 +91,12 @@ public class CustomerRestController {
 		
 		// Assert expanded string to check all variables got replaced
 		Assert.isTrue(expandedTemplatedSelfLink.getHref().equals(ServletUriComponentsBuilder.fromCurrentContextPath().path("/customers/" + customerId).build().toString()), "Template expansion failed");
+
+		// Create and add link to customers plural resource url using LinkRelation, we can add relation as a plain string as well
+		Link customersLink = new Link(ServletUriComponentsBuilder.fromCurrentContextPath().path("/customers").build().toString(), LinkRelation.of("customers"));
 		
 		// Build entity model from data and links
-		EntityModel<CustomerGetDto> entityModel2 = new EntityModel<CustomerGetDto>(customerGetDto, expandedTemplatedSelfLink);
+		EntityModel<CustomerGetDto> entityModel2 = new EntityModel<CustomerGetDto>(customerGetDto, expandedTemplatedSelfLink, customersLink);
 		
 		return entityModel2;
 	}
