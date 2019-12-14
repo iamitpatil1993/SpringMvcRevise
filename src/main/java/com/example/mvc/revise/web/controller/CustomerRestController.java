@@ -1,6 +1,12 @@
 package com.example.mvc.revise.web.controller;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.LinkRelation;
 import org.springframework.http.HttpStatus;
@@ -67,6 +73,10 @@ public class CustomerRestController {
 		final Customer customer = customerService.findById(customerId).get();
 		final CustomerGetDto customerGetDto = Util.convertUsingModelMapper(customer, CustomerGetDto.class);
 
+		return convertToHateoasBasedDto(customerId, customerGetDto);
+	}
+
+	private CustomerGetDto convertToHateoasBasedDto(final Long customerId, final CustomerGetDto customerGetDto) {
 		/*
 		// This is manual link creation, if we do not pass relation, default link type will be self
 		Link selfLink = new Link(ServletUriComponentsBuilder.fromCurrentRequest().build().toString());
@@ -98,6 +108,29 @@ public class CustomerRestController {
 		
 		customerGetDto.add(expandedTemplatedSelfLink, customersLink);
 		return customerGetDto;
+	}
+	
+	@GetMapping(path = "/customers")
+	@ResponseStatus(code = HttpStatus.OK)
+	public CollectionModel<CustomerGetDto> getAll() {
+		Collection<Customer> customers = customerService.findAll();
+
+		// convert Entity -> CustomerGetDto -> CustomerGetDto populated with links
+		final List<CustomerGetDto> customersGetDtosWithLinks = customers.stream()
+				.map(customer -> Util.convertUsingModelMapper(customer, CustomerGetDto.class))
+				.map(customerGetDto -> convertToHateoasBasedDto(customerGetDto.getId(), customerGetDto))
+				.collect(Collectors.toList());
+
+		// Create link to self i.e this collection resource
+		final Link customersSelfLink = new Link(
+				ServletUriComponentsBuilder.fromCurrentContextPath().path("/customers").build().toString());
+
+		// Create collection model with DTO collection and links to collection URL
+		// (this) resource
+		final CollectionModel<CustomerGetDto> collectionModel = new CollectionModel<>(customersGetDtosWithLinks,
+				customersSelfLink);
+
+		return collectionModel;
 	}
 
 }
