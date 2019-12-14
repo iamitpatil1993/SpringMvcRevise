@@ -151,6 +151,20 @@
 			<version>5.4.9.Final</version>
 		</dependency>
 
+		<!-- dependency required to add support for spring-hateoas -->
+		<dependency>
+			<groupId>org.springframework.hateoas</groupId>
+			<artifactId>spring-hateoas</artifactId>
+			<version>1.0.2.RELEASE</version>
+		</dependency>
+
+		<!-- I don't know use of this library, but all tutorials I saw, use this 
+			lib for spring projects [Not required for spring boot] -->
+		<dependency>
+			<groupId>org.springframework.plugin</groupId>
+			<artifactId>spring-plugin-core</artifactId>
+			<version>2.0.0.RELEASE</version>
+		</dependency>
 
 	</dependencies>
 
@@ -171,3 +185,4 @@
 	</build>
 
 </project>
+

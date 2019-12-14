@@ -12,6 +12,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.hateoas.config.EnableHypermediaSupport;
+import org.springframework.hateoas.config.EnableHypermediaSupport.HypermediaType;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
@@ -39,6 +41,10 @@ import com.example.mvc.revise.web.interceptor.RequestLoggingInterceptor;
 @EnableWebMvc
 @ComponentScan(basePackages = { "com.example.mvc.revise.web" })
 @Configuration
+//We need to enable HAL based HATEOAS
+// This enables TypeConstrainedMappingJackson2HttpMessageConverter and hence if Accept header is 'application/hal+json' this MessageConveter is get used over 
+// MappingJackson2HttpMessageConverter to convert response.
+@EnableHypermediaSupport(type = {HypermediaType.HAL})
 public class WebConfiguration implements WebMvcConfigurer {
 
 	private List<HttpMessageConverter<?>> messageConvertersForBodyProcessor = new ArrayList<>(2);
