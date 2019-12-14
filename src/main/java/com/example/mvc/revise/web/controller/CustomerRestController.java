@@ -3,7 +3,9 @@ package com.example.mvc.revise.web.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.server.EntityLinks;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -66,12 +68,33 @@ public class CustomerRestController {
 		final Customer customer = customerService.findById(customerId).get();
 		final CustomerGetDto customerGetDto = Util.convertUsingModelMapper(customer, CustomerGetDto.class);
 
+		/*
 		// This is manual link creation, if we do not pass relation, default link type will be self
 		Link selfLink = new Link(ServletUriComponentsBuilder.fromCurrentRequest().build().toString());
 		System.out.println("self link is = " + selfLink);
 		// EntityModel is a container of both actual data and HATEOAS links
 		EntityModel<CustomerGetDto> entityModel = new EntityModel<CustomerGetDto>(customerGetDto, selfLink);
-		return entityModel;
+		*/
+		
+		// This will create templated Link
+		Link templatedSelfLink = new Link(ServletUriComponentsBuilder.fromCurrentContextPath().path("/customers/{customerId}").build().toString());
+		
+		// spring will automatically detect template variables using brackets and this link will be templated
+		Assert.isTrue(templatedSelfLink.isTemplated(), "Link should be templated, as it has template variable customerId");;
+		
+		// customerId will be template variable detected by spring
+		Assert.isTrue(templatedSelfLink.getVariableNames().contains("customerId"), "link must detect single template variable nammed customerId");
+		
+		// expand link, i.e provide template variables and get expanded link
+		Link expandedTemplatedSelfLink = templatedSelfLink.expand(customerId);
+		
+		// Assert expanded string to check all variables got replaced
+		Assert.isTrue(expandedTemplatedSelfLink.getHref().equals(ServletUriComponentsBuilder.fromCurrentContextPath().path("/customers/" + customerId).build().toString()), "Template expansion failed");
+		
+		// Build entity model from data and links
+		EntityModel<CustomerGetDto> entityModel2 = new EntityModel<CustomerGetDto>(customerGetDto, expandedTemplatedSelfLink);
+		
+		return entityModel2;
 	}
 
 }
