@@ -44,6 +44,7 @@ import com.example.mvc.revise.web.interceptor.RequestLoggingInterceptor;
 //We need to enable HAL based HATEOAS
 // This enables TypeConstrainedMappingJackson2HttpMessageConverter and hence if Accept header is 'application/hal+json' this MessageConveter is get used over 
 // MappingJackson2HttpMessageConverter to convert response.
+// This configuration allows us to change response structure (based in HypermediaType standard) in single line change
 @EnableHypermediaSupport(type = {HypermediaType.HAL})
 public class WebConfiguration implements WebMvcConfigurer {
 
