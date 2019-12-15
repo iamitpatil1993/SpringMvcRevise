@@ -39,7 +39,7 @@ import com.example.mvc.revise.web.interceptor.LatencyCalculatorInterceptor;
 import com.example.mvc.revise.web.interceptor.RequestLoggingInterceptor;
 
 @EnableWebMvc
-@ComponentScan(basePackages = { "com.example.mvc.revise.web", "com.example.mvc.revise.dto.assembler" })
+@ComponentScan(basePackages = { "com.example.mvc.revise.web", "com.example.mvc.revise.dto.assembler", "com.example.mvc.revise.dto.processor" })
 @Configuration
 //We need to enable HAL based HATEOAS
 // This enables TypeConstrainedMappingJackson2HttpMessageConverter and hence if Accept header is 'application/hal+json' this MessageConveter is get used over 
