@@ -1,12 +1,14 @@
 package com.example.mvc.revise.web.controller;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.LinkRelation;
 import org.springframework.http.HttpStatus;
@@ -73,9 +75,10 @@ public class CustomerRestController {
 		final Customer customer = customerService.findById(customerId).get();
 		final CustomerGetDto customerGetDto = Util.convertUsingModelMapper(customer, CustomerGetDto.class);
 
-		return convertToHateoasBasedDto(customerId, customerGetDto);
+		return convertToHateoasBasedDtoUsingControllerMethodRef(customerId, customerGetDto);
 	}
 
+	@SuppressWarnings("unused")
 	private CustomerGetDto convertToHateoasBasedDto(final Long customerId, final CustomerGetDto customerGetDto) {
 		/*
 		// This is manual link creation, if we do not pass relation, default link type will be self
@@ -118,7 +121,7 @@ public class CustomerRestController {
 		// convert Entity -> CustomerGetDto -> CustomerGetDto populated with links
 		final List<CustomerGetDto> customersGetDtosWithLinks = customers.stream()
 				.map(customer -> Util.convertUsingModelMapper(customer, CustomerGetDto.class))
-				.map(customerGetDto -> convertToHateoasBasedDto(customerGetDto.getId(), customerGetDto))
+				.map(customerGetDto -> convertToHateoasBasedDtoUsingControllerMethodRef(customerGetDto.getId(), customerGetDto))
 				.collect(Collectors.toList());
 
 		// Create link to self i.e this collection resource
@@ -133,4 +136,22 @@ public class CustomerRestController {
 		return collectionModel;
 	}
 
+	/**
+	 * Populates CustomerGetDto with links using manual method references
+	 * 
+	 * @return CustomerGetDto with links to self and customers plural resource.
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 */
+	private CustomerGetDto convertToHateoasBasedDtoUsingControllerMethodRef(final Long customerId,
+			final CustomerGetDto customerGetDto) {
+		// create link to singular resource using method reference
+		Link customerSelfLink = linkTo(methodOn(CustomerRestController.class).findById(customerId)).withSelfRel();
+
+		// create link to customer plural resource using method reference.
+		Link customersLink = linkTo(methodOn(CustomerRestController.class).getAll()).withRel(LinkRelation.of("customers"));
+
+		// add links to DTO
+		return customerGetDto.add(customerSelfLink, customersLink);
+	}
 }
