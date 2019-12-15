@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.LinkRelation;
+import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,10 +36,14 @@ import com.example.mvc.revise.util.Util;
 public class CustomerRestController {
 
 	private CustomerService customerService;
+	
+	// We will use this RepresentationModelAssembler to map CustomerGetDtos
+	private RepresentationModelAssembler<CustomerGetDto,CustomerGetDto> modelAssembler;
 
 	@Autowired
-	public CustomerRestController(CustomerService customerService) {
+	public CustomerRestController(CustomerService customerService, RepresentationModelAssembler<CustomerGetDto,CustomerGetDto> modelAssembler) {
 		this.customerService = customerService;
+		this.modelAssembler = modelAssembler;
 	}
 
 	/**
@@ -75,7 +80,7 @@ public class CustomerRestController {
 		final Customer customer = customerService.findById(customerId).get();
 		final CustomerGetDto customerGetDto = Util.convertUsingModelMapper(customer, CustomerGetDto.class);
 
-		return convertToHateoasBasedDtoUsingControllerMethodRef(customerId, customerGetDto);
+		return modelAssembler.toModel(customerGetDto);
 	}
 
 	@SuppressWarnings("unused")
@@ -121,7 +126,7 @@ public class CustomerRestController {
 		// convert Entity -> CustomerGetDto -> CustomerGetDto populated with links
 		final List<CustomerGetDto> customersGetDtosWithLinks = customers.stream()
 				.map(customer -> Util.convertUsingModelMapper(customer, CustomerGetDto.class))
-				.map(customerGetDto -> convertToHateoasBasedDtoUsingControllerMethodRef(customerGetDto.getId(), customerGetDto))
+				.map(modelAssembler::toModel)
 				.collect(Collectors.toList());
 
 		// Create link to self i.e this collection resource
@@ -143,6 +148,7 @@ public class CustomerRestController {
 	 * @throws NoSuchMethodException
 	 * @throws SecurityException
 	 */
+	@SuppressWarnings("unused")
 	private CustomerGetDto convertToHateoasBasedDtoUsingControllerMethodRef(final Long customerId,
 			final CustomerGetDto customerGetDto) {
 		// create link to singular resource using method reference
