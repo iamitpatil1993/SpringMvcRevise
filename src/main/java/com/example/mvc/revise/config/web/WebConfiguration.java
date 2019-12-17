@@ -66,7 +66,20 @@ public class WebConfiguration implements WebMvcConfigurer {
 
 	@Override
 	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
-		configurer.enable();
+		// We can ask spring to throw NoHandlerFoundException if no handler found by request using HandlerMapping.
+		// In that case spring will not send http 404 instead, will throw NoHandlerFoundException exception and 
+		// we can handle this exception as we want using @ExceptionHandler
+		// but in order to above work we need to disable default servlet that handles static resource serving.
+		// this makes sense because, spring checks if we have handler mapping if not then it checks static resource for which 
+		// it delegates to default servlet in container, which then checks that no static resource found by given url then
+		// it sends 404 response. So, to avoid this we need to disable default servlet, which will disable static resources serving
+		// in application, so we should use this solution to handle handler mapping not found only when we have pure REST project
+		// and do not need default servlet to handle static resources, otherwise we need to check alternative solution for this.
+		// refer https://stackoverflow.com/questions/34935785/setting-throwexceptionifnohandlerfound-has-no-effect-in-spring-4-2
+		// refer search for throwExceptionIfNoHandlerFound in https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-container-config
+		
+		
+		//configurer.enable();
 	}
 
 	@Override

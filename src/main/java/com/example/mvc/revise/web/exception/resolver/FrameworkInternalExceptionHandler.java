@@ -8,6 +8,7 @@ import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.example.mvc.revise.dto.JsonResponse;
@@ -59,4 +60,15 @@ public class FrameworkInternalExceptionHandler extends ResponseEntityExceptionHa
 	/**
 	 * Similarly we can handle all exceptions here by overriding methods from base.
 	 */
+	
+	
+	/**
+	 * Handle NoHandlerFoundException
+	 */
+	@Override
+	protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers,
+			HttpStatus status, WebRequest request) {
+		return ResponseEntity.status(status).headers(headers)
+				.body(new JsonResponse().setHttpStatus(status).setMessage(ex.getMessage()));
+	}
 }
