@@ -7,12 +7,15 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.LinkRelation;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,6 +38,8 @@ import com.example.mvc.revise.util.Util;
 @RestController
 public class CustomerRestController {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(CustomerRestController.class);
+	
 	private CustomerService customerService;
 	
 	// We will use this RepresentationModelAssembler to map CustomerGetDtos
@@ -121,6 +126,7 @@ public class CustomerRestController {
 	@GetMapping(path = "/customers")
 	@ResponseStatus(code = HttpStatus.OK)
 	public CollectionModel<CustomerGetDto> getAll() {
+		LOGGER.info("Inside getAll, this should not get logged to console since there is no implementation or binding for slf4j in classpath");
 		Collection<Customer> customers = customerService.findAll();
 
 		// convert Entity -> CustomerGetDto -> CustomerGetDto populated with links
