@@ -9,13 +9,13 @@ import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.LinkRelation;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -79,6 +79,17 @@ public class CustomerRestController {
 		return new JsonResponse().setData(customerGetDto).setHttpStatus(HttpStatus.OK).setMessage("Updated");
 	}
 
+	/**
+	 * NOTE: When we use pattern for path variable and if user sends non integer
+	 * value as a customerId path parameter, spring will throw 404 error since uri
+	 * do not match required path pattern, so don't expect
+	 * {@link TypeMismatchException} when user sends non-numeric value as a path
+	 * parameter. 
+	 * So, avoid using pattern for java types, rather let {@link TypeMismatchException} occur and handle it and send
+	 * Appropriate response instead of 404. 
+	 * @param customerId
+	 * @return
+	 */
 	@GetMapping(path = "/customers/{customerId:^[1-9]\\d*$}")
 	@ResponseStatus(HttpStatus.OK)
 	public CustomerGetDto findById(final @PathVariable Long customerId) {
