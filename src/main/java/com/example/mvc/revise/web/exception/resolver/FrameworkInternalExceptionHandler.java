@@ -1,5 +1,6 @@
 package com.example.mvc.revise.web.exception.resolver;
 
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -70,5 +71,15 @@ public class FrameworkInternalExceptionHandler extends ResponseEntityExceptionHa
 			HttpStatus status, WebRequest request) {
 		return ResponseEntity.status(status).headers(headers)
 				.body(new JsonResponse().setHttpStatus(status).setMessage(ex.getMessage()));
+	}
+	
+	/**
+	 * {@link TypeMismatchException} is thrown when spring fails to parse or there is parsing error in path variables.
+	 * For example, path variable is declared as a integer but user sends non numeric value for that path variable.
+	 */
+	@Override
+	protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers,
+			HttpStatus status, WebRequest request) {
+		return handleException(ex, headers, status);
 	}
 }
