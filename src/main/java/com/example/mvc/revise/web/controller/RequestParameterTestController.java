@@ -1,5 +1,6 @@
 package com.example.mvc.revise.web.controller;
 
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -114,11 +115,17 @@ public class RequestParameterTestController {
 	 * environment, and other property sources. You can use this, for example, to
 	 * parameterize a base URL based on some external configuration.
 	 * 
+	 * NOTE: This API and above one has same url and completely depends on value of variable values,
+	 * so spring applies pattern matching using {@link AntPathMatcher#getPatternComparator(String)} to determine 
+	 * best or most suitable handler for url.
+	 * So, if we send request to '/path-param/test/spring-web-3.3.4.jar' spring will call above handler and if 
+	 * we send request to  '/path-param/test/v1' then spring will choose this handler. Great ha.
+	 * 
 	 * @param appVersion user must send appVersion which is active and configured as
 	 *                   a property placeholder using app.properties
 	 * @return
 	 */
-	@GetMapping(path = { "/path-param/test/placeholders/{appVersion:${api.version}}" })
+	@GetMapping(path = { "/path-param/test/{appVersion:${api.version}}" })
 	public String placeHolderBasedPathVariable(@PathVariable String appVersion) {
 		return String.format("Current API version is %s", appVersion);
 	}
