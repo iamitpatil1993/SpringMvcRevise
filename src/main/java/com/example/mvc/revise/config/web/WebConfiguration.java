@@ -8,9 +8,11 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.hateoas.config.EnableHypermediaSupport;
 import org.springframework.hateoas.config.EnableHypermediaSupport.HypermediaType;
@@ -46,6 +48,7 @@ import com.example.mvc.revise.web.interceptor.RequestLoggingInterceptor;
 // MappingJackson2HttpMessageConverter to convert response.
 // This configuration allows us to change response structure (based in HypermediaType standard) in single line change
 @EnableHypermediaSupport(type = {HypermediaType.HAL})
+@PropertySource(value = {"classpath:app.properties"})
 public class WebConfiguration implements WebMvcConfigurer {
 
 	private List<HttpMessageConverter<?>> messageConvertersForBodyProcessor = new ArrayList<>(2);
@@ -209,4 +212,6 @@ public class WebConfiguration implements WebMvcConfigurer {
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**").allowedOrigins("http://localhost:8088").allowedHeaders("customHeader");
 	}
+	
+
 }

@@ -107,4 +107,20 @@ public class RequestParameterTestController {
 		return String.format("Version is :: %s and file extension is :: %s, name of artifact is :: %s", version, ext,
 				name);
 	}
+	
+	/**
+	 * URI path patterns can also have embedded ${…​} placeholders that are resolved
+	 * on startup by using PropertyPlaceHolderConfigurer against local, system,
+	 * environment, and other property sources. You can use this, for example, to
+	 * parameterize a base URL based on some external configuration.
+	 * 
+	 * @param appVersion user must send appVersion which is active and configured as
+	 *                   a property placeholder using app.properties
+	 * @return
+	 */
+	@GetMapping(path = { "/path-param/test/placeholders/{appVersion:${api.version}}" })
+	public String placeHolderBasedPathVariable(@PathVariable String appVersion) {
+		return String.format("Current API version is %s", appVersion);
+	}
+	
 }
