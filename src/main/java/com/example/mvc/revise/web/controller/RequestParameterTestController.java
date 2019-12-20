@@ -1,6 +1,7 @@
 package com.example.mvc.revise.web.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -86,5 +87,24 @@ public class RequestParameterTestController {
 	private String getResultString(String fooParam, String barParam) {
 		return String.format("Called %s with fooParam :: %s and barParam :: %s",
 				new Throwable().getStackTrace()[1].getMethodName(), fooParam, barParam);
+	}
+	
+	/**
+	 * If we call this with '/path-param/test/spring-web-3.3.4.jar' then version
+	 * will be 3.3.4, name will be spring-web and ext will be .jar So, we can create
+	 * multiple path variables in url path by parsing single path element.
+	 * 
+	 * @param version extracted as a path variable for url path
+	 *                /spring-web-3.3.4.jar
+	 * @param ext     extracted as a path variable for url path
+	 *                /spring-web-3.3.4.jar
+	 * @param name    extracted as a path variable for url path
+	 *                /spring-web-3.3.4.jar
+	 * @return
+	 */
+	@GetMapping("/path-param/test/{name:[a-z-]+}-{version:\\d\\.\\d\\.\\d}{ext:\\.[a-z]+}")
+	public String handle(@PathVariable String version, @PathVariable String ext, @PathVariable String name) {
+		return String.format("Version is :: %s and file extension is :: %s, name of artifact is :: %s", version, ext,
+				name);
 	}
 }
