@@ -6,7 +6,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
+import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.bind.ServletRequestBindingException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.NoHandlerFoundException;
@@ -81,5 +84,17 @@ public class FrameworkInternalExceptionHandler extends ResponseEntityExceptionHa
 	protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers,
 			HttpStatus status, WebRequest request) {
 		return handleException(ex, headers, status);
+	}
+	
+	/**
+	 * Handle {@link MissingRequestHeaderException}
+	 */
+	@Override
+	protected ResponseEntity<Object> handleServletRequestBindingException(ServletRequestBindingException ex,
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
+		if (ex instanceof MissingRequestHeaderException) {
+			return handleException(ex, headers, status);
+		}
+		return super.handleServletRequestBindingException(ex, headers, status, request);
 	}
 }
