@@ -1,5 +1,7 @@
 package com.example.mvc.revise.web.controller;
 
+import java.util.List;
+
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -89,7 +91,26 @@ public class RequestParameterTestController {
 		return String.format("Called %s with fooParam :: %s and barParam :: %s",
 				new Throwable().getStackTrace()[1].getMethodName(), fooParam, barParam);
 	}
-	
+
+	/**
+	 * Spring supports multi-value query parameters out of the box. We can send
+	 * multiple values for query parameter either comma separated or multiple
+	 * key-value pair of query param. Spring also parse each query parameter value
+	 * to collection, and if value of one of query parameter is not valid Bad
+	 * Request is send to client
+	 * 
+	 * @param params
+	 * @param intParams
+	 * @return
+	 */
+	@GetMapping(path = QUERY_PARAMS_TEST_PATH, params = { "param", "intParam" })
+	public String multiValueRequestParameter(final @RequestParam(name = "param") List<String> params,
+			final @RequestParam(name = "intParam") List<Integer> intParams) {
+		return String.format(
+				"Multi value params are supported in spring as a comma separated along with parsing of each param to appropriate declared type, params :: %s, intParams :: %s",
+				params, intParams);
+	}
+
 	/**
 	 * If we call this with '/path-param/test/spring-web-3.3.4.jar' then version
 	 * will be 3.3.4, name will be spring-web and ext will be .jar So, we can create
