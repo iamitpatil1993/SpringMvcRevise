@@ -179,8 +179,8 @@
 
 		<!-- logging -->
 		<!-- We added this so that, we want to bridge calls to jcl in spring framework 
-			code to slf4k. This will disable spring's internal logging and we can control both
-			application as well as spring internal logging using our own logback.xml -->
+			code to slf4k. This will disable spring's internal logging and we can control 
+			both application as well as spring internal logging using our own logback.xml -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>jcl-over-slf4j</artifactId>
@@ -188,23 +188,11 @@
 		</dependency>
 
 		<!-- This is howe can configure log4j -->
-<!--  
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-api</artifactId>
-			<version>2.11.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-core</artifactId>
-			<version>2.11.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-slf4j-impl</artifactId>
-			<version>2.11.1</version>
-		</dependency>
--->
+		<!-- <dependency> <groupId>org.apache.logging.log4j</groupId> <artifactId>log4j-api</artifactId> 
+			<version>2.11.1</version> </dependency> <dependency> <groupId>org.apache.logging.log4j</groupId> 
+			<artifactId>log4j-core</artifactId> <version>2.11.1</version> </dependency> 
+			<dependency> <groupId>org.apache.logging.log4j</groupId> <artifactId>log4j-slf4j-impl</artifactId> 
+			<version>2.11.1</version> </dependency> -->
 		<!-- Since logback has a built-in support for slf4j and implements slf4j 
 			out of the box, we do not need slf4j-api artifact in classpath it's already 
 			their inside logback-classic -->
@@ -213,8 +201,33 @@
 			<artifactId>logback-classic</artifactId>
 			<version>1.2.3</version>
 		</dependency>
-		</dependencies>
-	
+
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>2.0.1.Final</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate.validator</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>6.1.0.Final</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.el</groupId>
+			<artifactId>javax.el-api</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.glassfish</groupId>
+			<artifactId>javax.el</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+
+	</dependencies>
+
 	<build>
 		<finalName>spring-mvc-revise</finalName>
 		<plugins>

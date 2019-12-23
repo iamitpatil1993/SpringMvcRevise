@@ -7,6 +7,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.TypeMismatchException;
@@ -17,6 +19,7 @@ import org.springframework.hateoas.LinkRelation;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -61,7 +64,10 @@ public class CustomerRestController {
 	 */
 	@PostMapping(path = "/customers")
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public JsonResponse post(@DTO(type = CustomerPostDto.class) Customer customer) {
+	public JsonResponse post(@DTO(type = CustomerPostDto.class) @Valid Customer customer, BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+			return new JsonResponse().setHttpStatus(HttpStatus.BAD_REQUEST).setMessage("Insufficient data in request body");
+		}
 		Customer savedCustomer = customerService.createCustomer(customer);
 		CustomerGetDto customerGetDto = Util.convertUsingModelMapper(savedCustomer, CustomerGetDto.class);
 

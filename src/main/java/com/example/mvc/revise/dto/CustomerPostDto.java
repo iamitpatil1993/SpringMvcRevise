@@ -3,6 +3,9 @@ package com.example.mvc.revise.dto;
 import java.io.Serializable;
 import java.util.Calendar;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,8 +32,12 @@ public class CustomerPostDto implements Serializable {
 
 	private static final long serialVersionUID = -7515583505289341488L;
 
+	@NotNull(message = "firstName is required")
+	@NotEmpty(message = "firstName is empty")
 	private String firstName;
 
+	@NotNull(message = "lastName is required")
+	@NotEmpty(message = "lastName is empty")
 	private String lastName;
 
 	private Calendar createdOn = Calendar.getInstance();
