@@ -19,7 +19,7 @@ import org.springframework.hateoas.LinkRelation;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
-import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -64,9 +64,9 @@ public class CustomerRestController {
 	 */
 	@PostMapping(path = "/customers")
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public JsonResponse post(@DTO(type = CustomerPostDto.class) @Valid Customer customer, BindingResult bindingResult) {
+	public JsonResponse post(@DTO(type = CustomerPostDto.class) @Valid Customer customer, final Errors bindingResult) {
 		if (bindingResult.hasErrors()) {
-			return new JsonResponse().setHttpStatus(HttpStatus.BAD_REQUEST).setMessage("Insufficient data in request body");
+			throw new RequestBodyValidationException(bindingResult);
 		}
 		Customer savedCustomer = customerService.createCustomer(customer);
 		CustomerGetDto customerGetDto = Util.convertUsingModelMapper(savedCustomer, CustomerGetDto.class);
