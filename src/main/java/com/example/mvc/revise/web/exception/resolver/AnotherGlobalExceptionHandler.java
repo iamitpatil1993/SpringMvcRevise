@@ -20,7 +20,7 @@ import com.example.mvc.revise.web.controller.SpittleAlreadyExitstException;
  * @author amipatil
  *
  */
-@ControllerAdvice
+@ControllerAdvice 
 /**
  * if we have multiple Exception handlers in application then spring will
  * randomly chose first matching exception handler method for exception. Hence
@@ -36,7 +36,7 @@ import com.example.mvc.revise.web.controller.SpittleAlreadyExitstException;
  * @author amipatil
  *
  */
-@Order(value = 1)
+@Order(value = 2)
 public class AnotherGlobalExceptionHandler extends BaseGlobalExceptionHandler {
 
 	/**
@@ -64,4 +64,5 @@ public class AnotherGlobalExceptionHandler extends BaseGlobalExceptionHandler {
 		exception.printStackTrace();
 		return "/errors/notFound";
 	}
+
 }

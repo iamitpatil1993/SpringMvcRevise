@@ -3,10 +3,9 @@ package com.example.mvc.revise.dto;
 import java.io.Serializable;
 import java.util.Date;
 
-import org.springframework.web.multipart.MultipartFile;
+import javax.xml.bind.annotation.XmlRootElement;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
+@XmlRootElement // Need this to set this class as a root of XML
 public class Employee implements Serializable {
 
 	/**
@@ -14,13 +13,12 @@ public class Employee implements Serializable {
 	 */
 	private static final long serialVersionUID = -2821654871402178482L;
 
+	private String id;
+	
 	private String firstName;
 
 	private String lastName;
 
-	// we can use all Jackson/Jaxb annotations to define format of Date fields
-	// in serialized Json/XML and vice versa
-	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date dob = new Date();
 
 	public String getFirstName() {
@@ -47,4 +45,19 @@ public class Employee implements Serializable {
 		this.dob = dob;
 	}
 
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	@Override
+	public String toString() {
+		return "Employee [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", dob=" + dob + "]";
+	}
+
+	
+	
 }

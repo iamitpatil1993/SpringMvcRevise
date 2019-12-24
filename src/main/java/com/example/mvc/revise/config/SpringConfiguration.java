@@ -1,11 +1,11 @@
 package com.example.mvc.revise.config;
 
-import com.example.mvc.revise.config.web.WebConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+
+import com.example.mvc.revise.config.web.WebConfiguration;
 
 @Configuration
 @Import({ WebConfiguration.class, RootConfiguration.class })

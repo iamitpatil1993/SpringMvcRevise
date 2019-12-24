@@ -9,6 +9,7 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 import com.example.mvc.revise.config.RootConfiguration;
 import com.example.mvc.revise.web.filter.LatencyLoggerFilter;
 import com.example.mvc.revise.web.filter.RequestLoggerServletFilter;
+import com.example.mvc.revise.web.filter.ResponseHeaderUpdateFilter;
 
 /**
  * Three things that we need to configure are RootConfig class, WEebConfig class
@@ -34,7 +35,7 @@ public class DispatcherServletInitializer extends AbstractAnnotationConfigDispat
 
 	@Override
 	protected Filter[] getServletFilters() {
-		return new Filter[] { new LatencyLoggerFilter(), new RequestLoggerServletFilter() };
+		return new Filter[] { new LatencyLoggerFilter(), new RequestLoggerServletFilter(), new ResponseHeaderUpdateFilter()};
 	}
 
 	/**
@@ -46,5 +47,10 @@ public class DispatcherServletInitializer extends AbstractAnnotationConfigDispat
 	protected void customizeRegistration(Dynamic registration) {
 		final MultipartConfigElement configElement = new MultipartConfigElement("/home/amipatil/files/temp");
 		registration.setMultipartConfig(configElement);
+		
+		// we need to set this init parameter to ask spring not to handle handlerMapping case by sending 404, instead
+		// create and send NoHandlerFoundException, which our custom @ExceptionHandler class can handle gracefully
+		// see https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-container-config
+		registration.setInitParameter("throwExceptionIfNoHandlerFound", "true");
 	}
 }

@@ -1,12 +1,13 @@
 package com.example.mvc.revise.dao;
 
-import com.example.mvc.revise.dto.Spittle;
-import org.springframework.stereotype.Repository;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
+
+import org.springframework.stereotype.Repository;
+
+import com.example.mvc.revise.dto.Spittle;
 
 /**
  * This is mock repository not connected to any persistence store.

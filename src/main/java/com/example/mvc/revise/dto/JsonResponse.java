@@ -1,7 +1,14 @@
 package com.example.mvc.revise.dto;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
+
 import org.springframework.http.HttpStatus;
 
+@XmlRootElement // Need this to set this class as a root of XML
+//Without this you will get exception, see https://stackoverflow.com/questions/14057932/javax-xml-bind-jaxbexception-class-nor-any-of-its-super-class-is-known-to-t
+// also see https://stackoverflow.com/questions/12288631/xmlseealso-and-xmlrootelement-names
+@XmlSeeAlso({Employee.class}) 
 public class JsonResponse {
 	
 	private HttpStatus httpStatus;
